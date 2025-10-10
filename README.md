@@ -1,7 +1,7 @@
 # study-docker
 docker学习项目：
 
-md笔记目录：src/main/resources/notes
+md笔记目录：src/main/resources/notes  
 compose目录: src/main/resources/compose
 
 尚硅谷3小时速通Docker教程，雷神带练docker部署到实战！
