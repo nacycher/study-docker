@@ -1,0 +1,15 @@
+FROM openjdk:8
+
+RUN mkdir -p /logs && chmod 777 /logs
+
+# 复制应用文件
+COPY xxl-job-admin-2.4.1-SNAPSHOT.jar startXxlJobAdmin.sh  ./
+COPY config/application.properties ./config/
+
+# 执行权限
+RUN chmod +x ./startXxlJobAdmin.sh \
+    && chmod 644 ./xxl-job-admin-2.4.1-SNAPSHOT.jar ./config/application.properties
+
+EXPOSE 8081
+
+CMD ["./startXxlJobAdmin.sh"]

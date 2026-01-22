@@ -1,0 +1,1 @@
+docker build -t spp/ap-worker:20260121v1 .

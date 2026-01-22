@@ -1,0 +1,1 @@
+docker build -t spp/kafka:20260121v1 .

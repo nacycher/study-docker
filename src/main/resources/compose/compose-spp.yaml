@@ -1,0 +1,10 @@
+name: spp
+services:
+  actuator:
+    image: spp/actuator:20260119
+    container_name: actuator-spp
+    restart: always
+    ports:
+      - "18093:18093"
+    volumes:
+      - ./actuator-logs:/spp/logs

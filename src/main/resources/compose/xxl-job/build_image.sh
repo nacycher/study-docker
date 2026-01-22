@@ -1,0 +1,1 @@
+docker build -t spp/xxl-job-admin:20260121v1 .

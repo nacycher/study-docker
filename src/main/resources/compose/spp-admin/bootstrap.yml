@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: spp-admin
+  profiles:
+    active: test
+  cloud:
+    nacos:
+      config:
+        server-addr: 172.26.122.77:8848
+        username: nacos
+        password: nacos
+        namespace: spp
+        group: ai
+        file-extension: yml
+        shared-configs: []
+      discovery:
+        server-addr: 172.26.122.77:8848
+        username: nacos
+        password: nacos
+        namespace: spp
+        group: ai
+        register-enabled: true
+logging:
+  level:
+    com.alibaba.cloud.nacos.config: DEBUG
+    com.alibaba.nacos.client.config: DEBUG
+  file:
+    name: logs/${spring.application.name}/info.log
+
+linuxscp:
+  host: dq3tQ2LVZv87Y3CkjiF1yg==
+  username: HmlsxvxnjwFL/a4168DeZQ==
+  password: u9m0NGxDLpJl0lRk+G4nFg==
+  port: 2AN/zIvAv9XwlbP8NGOKkQ==
+  local: /u01/spp/spp-ebiz/spp-admin/file/strategyFile/*
+  remote: /u01/spp/spp-ebiz/spp-admin/file/strategyFile
+  local-report: /u01/spp/spp-ebiz/spp-admin/reportForms
+  remote-report: /u01/spp/spp-ebiz/spp-admin/reportForms
+
+forms:
+  report-path: /u01/spp/spp-ebiz/spp-admin/reportForms

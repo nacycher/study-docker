@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: ap-worker
+  profiles:
+    active: test
+  cloud:
+    nacos:
+      config:
+        server-addr: 172.26.122.77:8848
+        username: nacos
+        password: nacos
+        namespace: spp
+        group: ai
+        file-extension: yml
+        shared-configs: []
+      discovery:
+        server-addr: 172.26.122.77:8848
+        username: nacos
+        password: nacos
+        namespace: spp
+        group: ai
+        register-enabled: true
+config-server:
+  url: http://127.0.0.1:18888
+logging:
+  level:
+    com.alibaba.cloud.nacos.config: DEBUG
+    com.alibaba.nacos.client.config: DEBUG

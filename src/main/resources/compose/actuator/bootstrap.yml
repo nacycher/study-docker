@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: adc-actuator
+  profiles:
+    active: test
+  cloud:
+    nacos:
+      config:  # 所有config相关配置归到此处
+        server-addr: 172.26.122.77:8848
+        username: nacos
+        password: nacos
+        namespace: spp
+        group: ai
+        file-extension: yml
+        shared-configs[0]:
+          data-id: adc-asc-nacos.yml
+          group: ai
+          refresh: true
+        shared-configs[1]:
+          data-id: adc-asc-kafka.yml
+          group: ai
+          refresh: true
+        shared-configs[2]:
+          data-id: adc-asc-log.yml
+          group: ai
+          refresh: true
+        shared-configs[3]:
+          data-id: adc-nfs.yml
+          group: ai
+          refresh: true
+      discovery:  # 所有discovery相关配置归到此处
+        server-addr: 172.26.122.77:8848
+        username: nacos
+        password: nacos
+        namespace: spp
+        group: ai
+        register-enabled: true
+logging:
+  file:
+    name: logs/${spring.application.name}/info.log

@@ -1,0 +1,1 @@
+docker build -t spp/actuator:20260119 .
