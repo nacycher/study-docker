@@ -13,8 +13,7 @@ java \
 -XX:MetaspaceSize=128M \
 -XX:MaxMetaspaceSize=256M \
 -jar /actuator.jar \
---spring.config.additional-location=/config/bootstrap.yml \  # 追加配置（而非覆盖）
---logging.path=/logs \
+--spring.config.additional-location=/config/bootstrap.yml \
 > /logs/nohup.out 2>&1
 
 # 4. 打印启动提示（若执行到此处，说明应用启动失败）

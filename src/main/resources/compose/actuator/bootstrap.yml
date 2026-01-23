@@ -21,10 +21,6 @@ spring:
           group: ai
           refresh: true
         shared-configs[2]:
-          data-id: adc-asc-log.yml
-          group: ai
-          refresh: true
-        shared-configs[3]:
           data-id: adc-nfs.yml
           group: ai
           refresh: true
@@ -35,6 +31,3 @@ spring:
         namespace: spp
         group: ai
         register-enabled: true
-logging:
-  file:
-    name: logs/${spring.application.name}/info.log

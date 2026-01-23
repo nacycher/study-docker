@@ -1,14 +1,9 @@
 name: spp
-networks:
-  netkafka:
-    driver: bridge
 
 services:
   mongo:
     image: mongo:4.0.5
     container_name: mongo
-    networks:
-      - netkafka
     ports:
       - "172.26.122.77:27017:27017"
     volumes:
@@ -21,8 +16,6 @@ services:
   kafka:
     image: bitnami/kafka:3.6.2
     container_name: kafka
-    networks:
-      - netkafka
     ports:
       - "172.26.122.77:9092:9092"
     environment:
@@ -43,8 +36,6 @@ services:
   spp-xxljob:
     image: spp/xxl-job-admin:20260121v1
     container_name: spp-xxljob
-    networks:
-      - netkafka
     ports:
       - "8081:8081"
     restart: always
@@ -52,8 +43,6 @@ services:
   spp-kafka:
     image: spp/kafka:20260121v1
     container_name: spp-kafka
-    networks:
-      - netkafka
     ports:
       - "18086:18086"
     restart: always
@@ -63,8 +52,6 @@ services:
   spp-admin:
     image: spp/spp-admin:20260121v1
     container_name: spp-admin
-    networks:
-      - netkafka
     ports:
       - "10003:10003"
     restart: always
@@ -74,8 +61,6 @@ services:
   spp-actuator:
     image: spp/actuator:20260121v1
     container_name: spp-actuator
-    networks:
-      - netkafka
     ports:
       - "18093:18093"
     restart: always
@@ -85,8 +70,6 @@ services:
   spp-ap-worker:
     image: spp/ap-worker:20260121v1
     container_name: spp-ap-worker
-    networks:
-      - netkafka
     ports:
       - "10006:10006"
     restart: always
