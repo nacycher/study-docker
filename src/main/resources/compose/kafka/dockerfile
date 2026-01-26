@@ -1,15 +1,15 @@
 FROM openjdk:8
 
-RUN mkdir -p /logs && chmod 777 /logs
+RUN mkdir -p /spp/logs && chmod 777 /spp/logs
 
 # 复制应用文件
-COPY kafka.jar startKafka.sh  ./
-COPY config/bootstrap.yml ./config/
+COPY kafka.jar startKafka.sh  /spp/
+COPY config/bootstrap.yml /spp/config/
 
 # 执行权限
-RUN chmod +x ./startKafka.sh \
-    && chmod 644 ./kafka.jar ./config/bootstrap.yml
+RUN chmod +x /spp/startKafka.sh \
+    && chmod 644 /spp/kafka.jar /spp/config/bootstrap.yml
 
 EXPOSE 18086
 
-CMD ["./startKafka.sh"]
+CMD ["/spp/startKafka.sh"]

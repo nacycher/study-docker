@@ -1,6 +1,6 @@
-name: spp
 networks:
   netkafka:
+    external: true
     driver: bridge
 
 services:
@@ -12,7 +12,7 @@ services:
     ports:
       - "172.26.122.77:27017:27017"
     volumes:
-      - /data/mongo/db:/data/db
+      - /tmp/frod/spp/mongo-data/db:/data/db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=1qaz2WSX
@@ -37,7 +37,7 @@ services:
       - KAFKA_KRAFT_CLUSTER_ID=abcdefghijklmnopqrstuv
     user: root
     volumes:
-      - /tmp/kafka-data:/bitnami/kafka/data
+      - /tmp/frod/spp/kafka-data:/bitnami/kafka/data
     restart: always
 
   spp-xxljob:
@@ -47,6 +47,8 @@ services:
       - netkafka
     ports:
       - "8081:8081"
+    volumes:
+      - /tmp/frod/spp/logs/spp-xxljob:/opt/xxl-job/logs
     restart: always
 
   spp-kafka:
@@ -56,6 +58,8 @@ services:
       - netkafka
     ports:
       - "18086:18086"
+    volumes:
+      - /tmp/frod/spp/logs/spp-kafka:/spp/logs
     restart: always
     depends_on:
       - kafka
@@ -67,6 +71,8 @@ services:
       - netkafka
     ports:
       - "10003:10003"
+    volumes:
+      - /tmp/frod/spp/logs/spp-admin:/spp/logs
     restart: always
     depends_on:
       - spp-xxljob
@@ -80,7 +86,7 @@ services:
       - "18093:18093"
     restart: always
     volumes:
-      - ./actuator-logs:/spp/logs
+      - /tmp/frod/spp/logs/spp-actuator:/spp/logs
 
   spp-ap-worker:
     image: spp/ap-worker:20260121v1
@@ -89,6 +95,8 @@ services:
       - netkafka
     ports:
       - "10006:10006"
+    volumes:
+      - /tmp/frod/spp/logs/spp-ap-worker:/spp/logs
     restart: always
     depends_on:
       - mongo

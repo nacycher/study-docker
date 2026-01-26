@@ -1,15 +1,15 @@
 FROM openjdk:8
 
-RUN mkdir -p /logs && chmod 777 /logs
+RUN mkdir -p /spp/logs && chmod 777 /spp/logs
 
 # 复制应用文件
-COPY spp-admin.jar startSppAdmin.sh  ./
-COPY config/bootstrap.yml ./config/
+COPY spp-admin.jar startSppAdmin.sh  /spp/
+COPY config/bootstrap.yml /spp/config/
 
 # 执行权限
-RUN chmod +x ./startSppAdmin.sh \
-    && chmod 644 ./spp-admin.jar ./config/bootstrap.yml
+RUN chmod +x /spp/startSppAdmin.sh \
+    && chmod 644 /spp/spp-admin.jar /spp/config/bootstrap.yml
 
 EXPOSE 10003
 
-CMD ["./startSppAdmin.sh"]
+CMD ["/spp/startSppAdmin.sh"]

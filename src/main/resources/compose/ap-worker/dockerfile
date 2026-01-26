@@ -1,15 +1,15 @@
 FROM openjdk:8
 
-RUN mkdir -p /logs && chmod 777 /logs
+RUN mkdir -p /spp/logs && chmod 777 /spp/logs
 
 # 复制应用文件
-COPY ap-worker.jar startApWorker.sh  ./
-COPY config/bootstrap.yml ./config/
+COPY ap-worker.jar startApWorker.sh  /spp/
+COPY config/bootstrap.yml /spp/config/
 
 # 执行权限
-RUN chmod +x ./startApWorker.sh \
-    && chmod 644 ./ap-worker.jar ./config/bootstrap.yml
+RUN chmod +x /spp/startApWorker.sh \
+    && chmod 644 /spp/ap-worker.jar /spp/config/bootstrap.yml
 
 EXPOSE 10006
 
-CMD ["./startApWorker.sh"]
+CMD ["/spp/startApWorker.sh"]
