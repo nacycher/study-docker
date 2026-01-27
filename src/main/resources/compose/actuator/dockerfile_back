@@ -1,16 +1,32 @@
-FROM openjdk:8
+FROM openjdk:8 AS java-base
 
-# 1. 提前创建logs目录并赋予可写权限（核心修复）
-RUN mkdir -p /logs && chmod 777 /logs
+FROM python:3.7-slim AS python-base
+RUN if [ ! -f /usr/local/bin/python ]; then ln -s /usr/local/bin/python3 /usr/local/bin/python; fi \
+    && if [ ! -f /usr/local/bin/pip ]; then ln -s /usr/local/bin/pip3 /usr/local/bin/pip; fi
 
-# 2. 复制应用文件（保持原有逻辑）
-COPY actuator.jar logback-spring.xml startActuator.sh  ./
-COPY config/bootstrap.yml ./config/
+FROM python:3.7-slim
 
-# 3. 赋予脚本执行权限，配置文件只读权限（保持原有逻辑）
-RUN chmod +x ./startActuator.sh \
-    && chmod 644 ./actuator.jar ./config/bootstrap.yml ./logback-spring.xml
+#复制Java环境 + 配置环境变量（Debian系标准路径，Java命令直接可用）
+COPY --from=java-base /usr/local/openjdk-8 /usr/local/openjdk-8
+ENV JAVA_HOME=/usr/local/openjdk-8
+ENV PATH=$JAVA_HOME/bin:$PATH
+
+# 离线安装pip包
+COPY ./pip_packages /usr/local/pip_packages
+RUN pip install --no-index --find-links=/usr/local/pip_packages -r /usr/local/pip_packages/requirements.txt \
+    && rm -rf /usr/local/pip_packages /root/.cache/pip
+
+# 提前创建目录
+RUN mkdir -p /spp/config /spp/logs && chmod 777 /spp/logs
+
+# 复制应用文件
+COPY actuator.jar logback-spring.xml startActuator.sh  /spp/
+COPY config/bootstrap.yml /spp/config/
+
+# 脚本执行权限
+RUN chmod +x /spp/startActuator.sh \
+    && chmod 644 /spp/actuator.jar /spp/config/bootstrap.yml /spp/logback-spring.xml
 
 EXPOSE 18093
 
-CMD ["./startActuator.sh"]
+CMD ["/spp/startActuator.sh"]

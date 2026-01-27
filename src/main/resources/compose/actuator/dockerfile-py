@@ -1,34 +1,31 @@
-# ========== 阶段1：Python 环境构建 ==========
-FROM python:3.7-slim AS python-env
-# 显式设置工作目录
-WORKDIR /python-build
-# 复制Python工具包（默认root权限，不额外限制）
-COPY python-tools/ /python-build/python-tools/
-# 安装工具包到Python系统目录+清理缓存
-RUN cd /python-build/python-tools/ && pip install --no-cache-dir . \
-    && rm -rf /root/.cache/pip
+FROM openjdk:8 AS java-base
 
-# ========== 阶段2：Java + Python 整合（宽松权限+功能完整） ==========
-FROM openjdk:8
+FROM python:3.7-slim AS python-base
+RUN if [ ! -f /usr/local/bin/python ]; then ln -s /usr/local/bin/python3 /usr/local/bin/python; fi \
+    && if [ ! -f /usr/local/bin/pip ]; then ln -s /usr/local/bin/pip3 /usr/local/bin/pip; fi
 
-# 1. 创建logs目录，使用777宽松权限（不考虑最小权限）
-RUN mkdir -p /logs && chmod 777 /logs
+FROM python:3.7-slim
 
-# 2. 复制Python环境（从python-env阶段），确保Python可用
-COPY --from=python-env /usr/local/ /usr/local/
-# 建立Python软链接，确保全局可调用
-RUN ln -s /usr/local/bin/python3.9 /usr/bin/python \
-    && ln -s /usr/local/bin/pip3.9 /usr/bin/pip
+# 复制Java环境 + 配置环境变量（纯镜像内复制，无网络）
+COPY --from=java-base /usr/local/openjdk-8 /usr/local/openjdk-8
+ENV JAVA_HOME=/usr/local/openjdk-8
+ENV PATH=$JAVA_HOME/bin:$PATH
 
-# 3. 复制Java应用文件（默认root权限，不指定chown）
-COPY actuator.jar logback-spring.xml startActuator.sh  ./
-COPY config/bootstrap.yml ./config/
+# 离线安装Python包（纯本地COPY+离线安装，无任何网络操作）
+COPY ./pip_packages /usr/local/pip_packages
+RUN pip install --no-index --find-links=/usr/local/pip_packages -r /usr/local/pip_packages/requirements.txt \
+    && rm -rf /usr/local/pip_packages /root/.cache/pip
 
-# 4. 设置Java相关文件权限（保留基础执行/只读，不做最小权限限制）
-RUN chmod +x ./startActuator.sh \
-    && chmod 644 ./actuator.jar ./config/bootstrap.yml ./logback-spring.xml
+# 提前创建目录
+RUN mkdir -p /spp/config /spp/logs && chmod 777 /spp/logs
 
-# 暴露端口
+# 复制应用文件（本地COPY，无网络）
+COPY actuator.jar logback-spring.xml startActuator.sh  /spp/
+COPY config/bootstrap.yml /spp/config/
+
+# 脚本执行权限
+RUN chmod +x /spp/startActuator.sh \
+    && chmod 644 /spp/actuator.jar /spp/config/bootstrap.yml /spp/logback-spring.xml
+
 EXPOSE 18093
-
-CMD ["./startActuator.sh"]
+CMD ["/spp/startActuator.sh"]

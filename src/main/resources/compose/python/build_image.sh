@@ -1,0 +1,1 @@
+docker build -t spp/python:20260121v1 .

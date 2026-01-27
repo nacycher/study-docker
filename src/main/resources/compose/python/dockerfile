@@ -1,0 +1,14 @@
+FROM python:3.7-slim
+LABEL maintainer="spp" version="1.0" description="Python3.7运行环境+业务代码+启动脚本，用于spp项目Java容器调用"
+
+RUN mkdir -p /spp/algorithm
+
+COPY ./algorithm/ /spp/algorithm/
+
+COPY startPython.sh /spp/
+
+RUN chmod +x /spp/startPython.sh
+
+# EXPOSE 5000
+
+CMD ["/spp/startPython.sh"]

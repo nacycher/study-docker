@@ -32,6 +32,13 @@ docker run -d  --name spp-ap-worker --network netkafka -p 10006:10006 spp/ap-wor
 docker run -d  --name spp-kafka --network netkafka -p 18086:18086 spp/kafka:20260121v1
 docker run -d  --name spp-admin --network netkafka  -p 10003:10003  spp/spp-admin:20260121v1
 docker run -d  --name spp-xxljob --network netkafka -p 8081:8081 spp/xxl-job-admin:20260121v1
+docker run -d  --name spp-python --network netkafka -v spp-algorithm-volume:/spp/algorithm/ spp/python:20260121v1
+
+docker volume create \
+--name spp-algorithm-volume \
+--opt type=none \
+--opt device=/tmp/frod/spp/python/algorithm \
+--opt o=bind
 
 docker exec -it spp-actuator /bin/bash
 docker exec -it spp-ap-worker tail-f /logs/nohup.out
@@ -46,3 +53,13 @@ linuxscp:
   remote: /u01/spp/spp-ebiz/spp-admin/file/strategyFile
   local-report: /u01/spp/spp-ebiz/spp-admin/reportForms
   remote-report: /u01/spp/spp-ebiz/spp-admin/reportForms
+
+
+python3.7 -m pip freeze > requirements.txt
+# 重新完整下载所有依赖的纯二进制包，无任何源码包
+PIP_INSECURE=1 python3.7 -m pip download -r requirements.txt -d ./pip_packages \
+  --only-binary=:all: \
+  -i http://mirrors.aliyun.com/pypi/simple/ \
+  --trusted-host mirrors.aliyun.com
+# 必做：将requirements.txt拷贝到包目录
+cp requirements.txt ./pip_packages/
