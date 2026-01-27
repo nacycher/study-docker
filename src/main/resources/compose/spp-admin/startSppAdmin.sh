@@ -14,10 +14,8 @@ java \
 -XX:MaxMetaspaceSize=256M \
 -jar /spp/spp-admin.jar \
 --spring.cloud.bootstrap.location=/spp/config/bootstrap.yml \
-> /spp/logs/nohup.out 2>&1
+2>&1 | tee -a /spp/logs/nohup.out
 
-# 4. 打印启动提示（若执行到此处，说明应用启动失败）
-echo "应用启动异常，日志路径：/spp/logs/nohup.out"
 
-# 5. 保持Docker容器前台运行（兜底）
-tail -f /spp/logs/nohup.out
+echo "【ERROR】应用启动异常/已退出，日志路径：/spp/logs/nohup.out"
+exit 1

@@ -1,20 +1,24 @@
-FROM openjdk:8 AS java-base
-
-FROM python:3.7-slim AS python-base
-RUN if [ ! -f /usr/local/bin/python ]; then ln -s /usr/local/bin/python3 /usr/local/bin/python; fi \
-    && if [ ! -f /usr/local/bin/pip ]; then ln -s /usr/local/bin/pip3 /usr/local/bin/pip; fi
-
+FROM openjdk:8-jre-slim AS java-base
 FROM python:3.7-slim
 
-# 复制Java环境 + 配置环境变量（纯镜像内复制，无网络）
 COPY --from=java-base /usr/local/openjdk-8 /usr/local/openjdk-8
 ENV JAVA_HOME=/usr/local/openjdk-8
 ENV PATH=$JAVA_HOME/bin:$PATH
 
-# 离线安装Python包（纯本地COPY+离线安装，无任何网络操作）
-COPY ./pip_packages /usr/local/pip_packages
+RUN if [ ! -f /usr/local/bin/python ]; then ln -s /usr/local/bin/python3 /usr/local/bin/python; fi \
+    && if [ ! -f /usr/local/bin/pip ]; then ln -s /usr/local/bin/pip3 /usr/local/bin/pip; fi
+
+# 离线安装Python包 + 清理冗余文件
+COPY ./python/pip_packages /usr/local/pip_packages
 RUN pip install --no-index --find-links=/usr/local/pip_packages -r /usr/local/pip_packages/requirements.txt \
-    && rm -rf /usr/local/pip_packages /root/.cache/pip
+    && rm -rf /usr/local/pip_packages /root/.cache/pip \
+    && find /usr/local/lib/python3.7/site-packages/ -name "__pycache__" -type d -exec rm -rf {} + \
+    && find /usr/local/lib/python3.7/site-packages/ -name "tests" -type d -exec rm -rf {} + \
+    && find /usr/local/lib/python3.7/site-packages/ -name "test" -type d -exec rm -rf {} + \
+    && find /usr/local/lib/python3.7/site-packages/ -name "*.md" -type f -delete \
+    && find /usr/local/lib/python3.7/site-packages/ -name "*.txt" -type f -delete \
+    && find /usr/local/lib/python3.7/site-packages/ -name "*.pdf" -type f -delete \
+    && find /usr/local/lib/python3.7/site-packages/ -name "*.rst" -type f -delete
 
 # 提前创建目录
 RUN mkdir -p /spp/config /spp/logs && chmod 777 /spp/logs
@@ -22,6 +26,7 @@ RUN mkdir -p /spp/config /spp/logs && chmod 777 /spp/logs
 # 复制应用文件（本地COPY，无网络）
 COPY actuator.jar logback-spring.xml startActuator.sh  /spp/
 COPY config/bootstrap.yml /spp/config/
+COPY ./python/algorithms /spp/python/algorithms
 
 # 脚本执行权限
 RUN chmod +x /spp/startActuator.sh \
