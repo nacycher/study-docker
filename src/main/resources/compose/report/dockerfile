@@ -1,0 +1,15 @@
+FROM openjdk:8
+
+RUN mkdir -p /report/logs && chmod 777 /report/logs
+
+# 复制应用文件
+COPY PlatCustomizeReportMain-0.0.1-SNAPSHOT.jar startReportService.sh  /report/
+COPY config/application-dev.yml /report/config/
+
+# 执行权限
+RUN chmod +x /report/startReportService.sh \
+    && chmod 644 /report/PlatCustomizeReportMain-0.0.1-SNAPSHOT.jar /report/config/application-dev.yml
+
+EXPOSE 9999
+
+CMD ["/report/startReportService.sh"]

@@ -1,0 +1,36 @@
+server:
+  port: 9999
+upload-path: ${SBDP_APP_FILEUPLOAD:/report/upload/}
+upload-maxsize: ${UPLOAD_MAXSIZE:10}
+export:
+  process-thread-pool-size: 5
+  max-concurrent-queries: 5
+  execution-timeout-minutes: 30
+  max_export_size: 300000
+spring:
+  application:
+    name: report-service
+
+  datasource:
+    driver-class-name: ${DB_DRIVER:com.mysql.cj.jdbc.Driver}
+    host: ${DB_HOST:pc-bp1gw781k60rjax22.mysql.polardb.rds.aliyuncs.com}
+    port: ${DB_PORT:3306}
+    username: ${USER_NAME:plus}
+    password: ${PASSWORD:rtwVRkprAVw2FGbm!}
+    default-db: ${DEFAULT_DB:wmswh1}
+    slaves: ${DB_SLAVES:jltpl,spp,wmswh1,wmswh2,wmswh3,wmswh4,wmswh5,wmswh6,wmswh7,wmswh8,wmswh9,wmswh10}
+    url-params: ${DB_URL_PARAMS:useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai}
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/**/*.xml
+
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+  global-config:
+    db-config:
+      id-type: auto

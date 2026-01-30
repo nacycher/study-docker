@@ -14,8 +14,17 @@ docker run --name kafka \
 -e ALLOW_PLAINTEXT_LISTENER=yes \
 -e KAFKA_KRAFT_CLUSTER_ID=abcdefghijklmnopqrstuv \
 --user root \
--v /tmp/kafka-data:/bitnami/kafka/data \
+-v /tmp/frod/spp/kafka-data:/bitnami/kafka/data \
 -d bitnami/kafka:3.6.2
+
+docker run --name kafka-ui \
+--network netkafka \
+-p 8099:8080 \
+-e KAFKA_CLUSTERS_0_NAME=Local-Kafka \
+-e KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092 \
+-e KAFKA_CLUSTERS_0_ALLOW_PLAINTEXT=true \
+-d \
+provectuslabs/kafka-ui
 
 docker run -d \
   --network  netkafka \
@@ -33,6 +42,9 @@ docker run -d  --name spp-kafka --network netkafka -p 18086:18086 spp/kafka:2026
 docker run -d  --name spp-admin --network netkafka  -p 10003:10003  spp/spp-admin:20260121v1
 docker run -d  --name spp-xxljob --network netkafka -p 8081:8081 spp/xxl-job-admin:20260121v1
 docker run -d  --name spp-python --network netkafka -v spp-algorithm-volume:/spp/algorithm/ spp/python:20260121v1
+
+docker run -d  --name report-service -p 9999:9999 -v /data/ford_app/temp/mysql/report/:/report/upload/ report-service:20260130v1
+
 
 docker volume create \
 --name spp-algorithm-volume \

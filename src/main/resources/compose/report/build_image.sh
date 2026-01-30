@@ -1,0 +1,1 @@
+docker build -t report-service:20260130v1 .
