@@ -1,6 +1,5 @@
 server:
   port: 9999
-#upload-path: ${SBDP_APP_FILEUPLOAD:C:/Users/15152/Downloads/}
 upload-path: ${SBDP_APP_FILEUPLOAD:/report/upload/}
 upload-maxsize: ${UPLOAD_MAXSIZE:10}
 export:
@@ -11,16 +10,16 @@ export:
 spring:
   application:
     name: report-service
+
   datasource:
     driver-class-name: ${DB_DRIVER:com.mysql.cj.jdbc.Driver}
-    host: ${DB_HOST:172.26.122.77}
+    host: ${DB_HOST:pc-bp1gw781k60rjax22.mysql.polardb.rds.aliyuncs.com}
     port: ${DB_PORT:3306}
-    username: ${USER_NAME:root}
-    password: ${PASSWORD:root123}
+    username: ${USER_NAME:plus}
+    password: ${PASSWORD:rtwVRkprAVw2FGbm!}
     default-db: ${DEFAULT_DB:wmswh1}
-    slaves: ${DB_SLAVES:wmswh2,jlplatform,bdp,jlbms,spp,wcs,jltpl,wmsept}
+    slaves: ${DB_SLAVES:jltpl,spp,wmswh1,wmswh2,wmswh3,wmswh4,wmswh5,wmswh6,wmswh7,wmswh8,wmswh9,wmswh10}
     url-params: ${DB_URL_PARAMS:useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai}
-    url: jdbc:mysql://${spring.datasource.host}:${spring.datasource.port}/${spring.datasource.default-db}?${spring.datasource.url-params}
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: Asia/Shanghai
@@ -37,10 +36,10 @@ mybatis-plus:
       id-type: auto
 
 sbdp:
-  host: http://172.26.122.77
+  host: https://cafplusqa.changanford.cn
   http:
     connect_timeout: 10000
-    read_timeout: 60000
+    read_timeout: 300000
   export:
     req_max_export_size: 500000
-    req_page_size: 20000
+    req_page_size: 10000

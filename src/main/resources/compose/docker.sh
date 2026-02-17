@@ -44,6 +44,11 @@ docker run -d  --name spp-xxljob --network netkafka -p 8081:8081 spp/xxl-job-adm
 docker run -d  --name spp-python --network netkafka -v spp-algorithm-volume:/spp/algorithm/ spp/python:20260121v1
 
 docker run -d  --name report-service -p 9999:9999 -v /data/ford_app/temp/mysql/report/:/report/upload/ report-service:20260130v1
+docker stop report-service && docker rm report-service &&
+
+
+docker tag report-service:20260209v1 cafcr-registry.cn-hangzhou.cr.aliyuncs.com/cafplus/report-service:20260209v1
+docker push cafcr-registry.cn-hangzhou.cr.aliyuncs.com/cafplus/report-service:20260209v1
 
 
 docker volume create \

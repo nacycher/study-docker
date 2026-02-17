@@ -1,14 +1,18 @@
 FROM openjdk:8
 
+# 创建日志目录并赋予777权限
 RUN mkdir -p /report/logs && chmod 777 /report/logs
 
-# 复制应用文件
+# 复制应用的jar包和启动脚本
 COPY PlatCustomizeReportMain-0.0.1-SNAPSHOT.jar startReportService.sh  /report/
-COPY config/application-dev.yml /report/config/
 
-# 执行权限
+# 复制所有环境的配置文件
+COPY config/application.yml /report/config/
+
+# 为相关文件赋权
 RUN chmod +x /report/startReportService.sh \
-    && chmod 644 /report/PlatCustomizeReportMain-0.0.1-SNAPSHOT.jar /report/config/application-dev.yml
+    && chmod 644 /report/PlatCustomizeReportMain-0.0.1-SNAPSHOT.jar \
+                 /report/config/application.yml
 
 EXPOSE 9999
 

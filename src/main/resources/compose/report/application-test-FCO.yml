@@ -13,12 +13,12 @@ spring:
 
   datasource:
     driver-class-name: ${DB_DRIVER:com.mysql.cj.jdbc.Driver}
-    host: ${DB_HOST:pc-bp1gw781k60rjax22.mysql.polardb.rds.aliyuncs.com}
+    host: ${DB_HOST:172.26.122.85}
     port: ${DB_PORT:3306}
-    username: ${USER_NAME:plus}
-    password: ${PASSWORD:rtwVRkprAVw2FGbm!}
+    username: ${USER_NAME:root}
+    password: ${PASSWORD:Sceadmin13#}
     default-db: ${DEFAULT_DB:wmswh1}
-    slaves: ${DB_SLAVES:jltpl,spp,wmswh1,wmswh2,wmswh3,wmswh4,wmswh5,wmswh6,wmswh7,wmswh8,wmswh9,wmswh10}
+    slaves: ${DB_SLAVES:jltpl,spp,wmswh1,wmswh2}
     url-params: ${DB_URL_PARAMS:useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai}
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
@@ -34,3 +34,12 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: auto
+
+sbdp:
+  host: https://plus.splanning.cn
+  http:
+    connect_timeout: 10000
+    read_timeout: 300000
+  export:
+    req_max_export_size: 500000
+    req_page_size: 10000

@@ -13,7 +13,6 @@ java \
 -XX:MetaspaceSize=128M \
 -XX:MaxMetaspaceSize=256M \
 -jar /report/PlatCustomizeReportMain-0.0.1-SNAPSHOT.jar \
---spring.profiles.active=dev \
 2>&1 | tee -a /report/logs/nohup.out
 
 

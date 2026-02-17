@@ -1,0 +1,17 @@
+# 更新apk源（可选，加速安装）
+sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
+
+# 安装字体核心依赖
+apk add --no-cache fontconfig ttf-dejavu
+
+# 重建字体缓存（关键）
+fc-cache -fv
+
+# 验证字体是否安装成功（有输出则正常）
+fc-list
+
+# 退出容器
+exit
+
+
+docker restart report-service
